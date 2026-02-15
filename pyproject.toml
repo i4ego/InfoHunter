@@ -1,0 +1,11 @@
+[project]
+name = "infohunter"
+version = "2026.0.0"
+dependencies = [
+   "psutil",
+   "requests",
+   "uuid",
+   "gputil"
+]
+requires-python = ">= 3.10"
+readme = "README.md"

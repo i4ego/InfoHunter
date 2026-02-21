@@ -5,7 +5,8 @@ dependencies = [
    "psutil",
    "requests",
    "uuid",
-   "gputil"
+   "gputil",
+   "pathlib"
 ]
 requires-python = ">= 3.10"
 readme = "README.md"

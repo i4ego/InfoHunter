@@ -19,3 +19,16 @@ class signals:
         for signum in self.raw_signals: self.signals.append(modules.signal.strsignal(signum))
     def __str__(self):
         return ", ".join(self.signals)
+
+class user:
+    def __init__(self,name: str, terminal: str | None = None, host: str | None = None, started: float | None = None): 
+        self.name = name; self.terminal = terminal; self.host = host; self.started = started
+    def __str__(self): return self.name
+class users:
+    def __init__(self):
+        self.current: user = user(modules.getpass.getuser())
+        self.active: list[user] = list()
+        for usr in modules.psutil.users(): self.active.append(user(usr.name, usr.terminal, usr.host, usr.started))
+        self.all: list[user] = list()
+        for usr in modules.os.listdir(modules.pathlib.Path.home()/".."): self.all.append(user(usr))
+    def __str__(self): return str(self.current)

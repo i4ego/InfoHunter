@@ -21,9 +21,7 @@ class signals:
         return ", ".join(self.signals)
 
 class user:
-    def __init__(self,name: str, terminal: str | None = None, host: str | None = None, started: float | None = None): 
-        self.name = name; self.terminal = terminal; self.host = host; self.started = started
-    def __str__(self): return self.name
+    def __init__(self,name: str, terminal: str | None = None, host: str | None = None, started: float | None = None): self.name = name; self.terminal = terminal; self.host = host; self.started = started
 class users:
     def __init__(self):
         self.current: user = user(modules.getpass.getuser())
@@ -32,3 +30,19 @@ class users:
         self.all: list[user] = list()
         for usr in modules.os.listdir(modules.pathlib.Path.home()/".."): self.all.append(user(usr))
     def __str__(self): return str(self.current)
+
+class cpufreq:
+    def __init__(self, current: float, min: float, max: float): self.current = current; self.min = min; self.max = max
+class cpucount:
+    def __init__(self, logical, physical): self.logical = logical; self.physical = physical
+class cpu:
+    def __init__(self):
+        self.cpu = modules.platform.processor()
+        freq = modules.psutil.cpu_freq()
+        self.freq = cpufreq(freq.current, freq.min, freq.max)
+        self.count = cpucount(modules.psutil.cpu_count(True), modules.psutil.cpu_count(False))
+        self.boot_time = modules.psutil.boot_time()
+        self.update()
+    def update(self):
+        self.percent = modules.psutil.cpu_percent()
+        self.freq.current = modules.psutil.cpu_freq().current

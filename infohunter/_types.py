@@ -46,3 +46,19 @@ class cpu:
     def update(self):
         self.percent = modules.psutil.cpu_percent()
         self.freq.current = modules.psutil.cpu_freq().current
+        return self.percent
+    def __str__(self):
+        return f"{self.cpu} ({self.percent}% used)"
+
+class ram:
+    def __init__(self):
+        self.update()
+    def update(self):
+        mem = modules.psutil.virtual_memory()
+        self.total = mem.total
+        self.avaliable = mem.available
+        self.used = mem.used
+        self.percent = mem.percent
+        return self.percent
+    def __str__(self):
+        return f"{self.percent}% used"

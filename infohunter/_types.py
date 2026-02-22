@@ -115,3 +115,15 @@ class network:
             self.timezone = ipinfo["timezone"]
     def __str__(self):
         return f"Host: {self.host}; Local IP: {self.localIP}; {self.publicIP if not self.publicIP is None else ""}"
+
+class battery: 
+    def __init__(self, percent, plugged, secsleft):
+        self.percent = percent; self.plugged = plugged; self.secsleft = secsleft
+    def __str__(self):
+        return f"{self.percent}%; {"Battery is charging" if self.plugged else "Battery is not charging"}; Seconds to discharge: {self.secsleft}"
+class sensors: 
+    def __init__(self):
+        self.update()
+    def update(self):
+        s_battery = modules.psutil.sensors_battery()
+        self.battery = battery(s_battery.percent, s_battery.power_plugged, s_battery.secsleft)

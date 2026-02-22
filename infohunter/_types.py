@@ -79,3 +79,19 @@ class gpu:
             self.gpus.append(singlegpu(gpu.name, gpu.id, gpu.uuid, gpu.load, (gpu.memoryTotal, gpu.memoryUsed, gpu.memoryFree)))
     def __str__(self):
         return "GPUs: "+(", ".join(str(self.gpus)))
+    
+class disk: 
+    def __init__(self, device, mount, fs, size: tuple[float, float, float], percent):
+        self.device = device; self.mount = mount; self.fs = fs; self.sizeTotal = size[0]; self.sizeUsed = size[1]; self.sizeFree = size[2]; self.percent = percent
+    def __str__(self):
+        return f"{self.device} ({self.mount})"
+class disks:
+    def __init__(self):
+        self.disks: list[disk] = list()
+        self.update()
+    def update(self):
+        disks = modules.psutil.disk_partitions(False)
+        self.disks.clear()
+        for iter_disk in disks:
+            size = modules.psutil.disk_usage(iter_disk.device)
+            self.disks.append(disk(iter_disk.device, iter_disk.mountpoint, iter_disk.fstype, (size.total, size.used, size.free), size.percent))

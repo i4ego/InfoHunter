@@ -95,3 +95,23 @@ class disks:
         for iter_disk in disks:
             size = modules.psutil.disk_usage(iter_disk.device)
             self.disks.append(disk(iter_disk.device, iter_disk.mountpoint, iter_disk.fstype, (size.total, size.used, size.free), size.percent))
+
+class network:
+    def __init__(self):
+        self.mac = modules.getnode()
+        self.update()
+    def update(self):
+        self.host = modules.socket.gethostname()
+        self.localIP = modules.socket.gethostbyname(self.host)
+        try: ipinfo = modules.json.loads(modules.requests.get("http://ipinfo.io/json").text)
+        except modules.requests.exceptions.ConnectionError: self.ipinfo = None
+        self.publicIP = None; self.country = None; self.region = None; self.city = None; self.postalcode = None; self.timezone = None
+        if not ipinfo is None:
+            self.publicIP = ipinfo["ip"]
+            self.country = ipinfo["country"]
+            self.region = ipinfo["region"]
+            self.city = ipinfo["city"]
+            self.postalcode = ipinfo["postal"]
+            self.timezone = ipinfo["timezone"]
+    def __str__(self):
+        return f"Host: {self.host}; Local IP: {self.localIP}; {self.publicIP if not self.publicIP is None else ""}"

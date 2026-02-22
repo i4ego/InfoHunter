@@ -104,7 +104,7 @@ class network:
         self.host = modules.socket.gethostname()
         self.localIP = modules.socket.gethostbyname(self.host)
         try: ipinfo = modules.json.loads(modules.requests.get("http://ipinfo.io/json").text)
-        except modules.requests.exceptions.ConnectionError: self.ipinfo = None
+        except modules.requests.exceptions.ConnectionError: ipinfo = None
         self.publicIP = None; self.country = None; self.region = None; self.city = None; self.postalcode = None; self.timezone = None
         if not ipinfo is None:
             self.publicIP = ipinfo["ip"]

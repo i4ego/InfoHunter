@@ -5,3 +5,4 @@ import getpass
 import psutil
 import pathlib
 import os
+import GPUtil

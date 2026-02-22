@@ -62,3 +62,20 @@ class ram:
         return self.percent
     def __str__(self):
         return f"{self.percent}% used"
+
+class singlegpu:
+    def __init__(self, name, id, uuid, load, memory: tuple[float, float, float]):
+        self.name = name, self.id = id, self.uuid = uuid, self.load = load; memory_total = memory[0]; memory_used = memory[1]; memory_free = memory[2]
+    def __str__(self):
+        return self.name
+class gpu:
+    def __init__(self):
+        self.gpus = list()
+        self.update()
+    def update(self):
+        self.gpus.clear()
+        gpus: list[modules.GPUtil.GPU] = modules.GPUtil.getGPUs()
+        for gpu in gpus:
+            self.gpus.append(singlegpu(gpu.name, gpu.id, gpu.uuid, gpu.load, (gpu.memoryTotal, gpu.memoryUsed, gpu.memoryFree)))
+    def __str__(self):
+        return "GPUs: "+(", ".join(str(self.gpus)))
